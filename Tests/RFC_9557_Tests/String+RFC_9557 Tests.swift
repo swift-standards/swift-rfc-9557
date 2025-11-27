@@ -13,7 +13,7 @@ struct StringExtensionParsingTests {
         let timestamp = "1996-12-19T16:39:57-08:00[America/Los_Angeles]"
         let dt = try timestamp.rfc9557ExtendedDateTime()
 
-        #expect(dt.base.time.year.value == 1996)
+        #expect(dt.base.time.year == 1996)
         #expect(dt.suffix?.timeZone?.identifier == "America/Los_Angeles")
     }
 
@@ -26,7 +26,7 @@ struct StringExtensionParsingTests {
 
         let dt = try substring.rfc9557ExtendedDateTime()
 
-        #expect(dt.base.time.year.value == 1996)
+        #expect(dt.base.time.year == 1996)
         #expect(dt.suffix?.timeZone?.identifier == "America/Los_Angeles")
     }
 
@@ -35,7 +35,7 @@ struct StringExtensionParsingTests {
         let timestamp = "1996-12-19T16:39:57-08:00"
         let dt = try timestamp.rfc9557ExtendedDateTime()
 
-        #expect(dt.base.time.year.value == 1996)
+        #expect(dt.base.time.year == 1996)
         #expect(dt.suffix == nil)
     }
 }

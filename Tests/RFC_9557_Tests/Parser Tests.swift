@@ -13,7 +13,7 @@ struct ParserBasicTests {
         let input = "1996-12-19T16:39:57-08:00"
         let dt = try RFC_9557.Parser.parse(input)
 
-        #expect(dt.base.time.year.value == 1996)
+        #expect(dt.base.time.year == 1996)
         #expect(dt.base.offset == .offset(seconds: -28800))
         #expect(dt.suffix == nil)
     }
@@ -23,7 +23,7 @@ struct ParserBasicTests {
         let input = "1996-12-19T16:39:57-08:00[America/Los_Angeles]"
         let dt = try RFC_9557.Parser.parse(input)
 
-        #expect(dt.base.time.year.value == 1996)
+        #expect(dt.base.time.year == 1996)
         #expect(dt.suffix?.timeZone == .iana("America/Los_Angeles", critical: false))
     }
 
@@ -70,9 +70,9 @@ struct ParserRFCExamplesTests {
         let input = "1996-12-19T16:39:57-08:00[America/Los_Angeles]"
         let dt = try RFC_9557.Parser.parse(input)
 
-        #expect(dt.base.time.year.value == 1996)
-        #expect(dt.base.time.month.value == 12)
-        #expect(dt.base.time.day.value == 19)
+        #expect(dt.base.time.year == 1996)
+        #expect(dt.base.time.month == 12)
+        #expect(dt.base.time.day == 19)
         #expect(dt.suffix?.timeZone?.identifier == "America/Los_Angeles")
     }
 
@@ -81,7 +81,7 @@ struct ParserRFCExamplesTests {
         let input = "2022-07-08T00:14:07Z[Europe/London][u-ca=iso8601]"
         let dt = try RFC_9557.Parser.parse(input)
 
-        #expect(dt.base.time.year.value == 2022)
+        #expect(dt.base.time.year == 2022)
         #expect(dt.suffix?.timeZone?.identifier == "Europe/London")
         #expect(dt.suffix?.calendar == "iso8601")
     }
