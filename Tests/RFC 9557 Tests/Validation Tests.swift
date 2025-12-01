@@ -27,44 +27,44 @@ struct ValidationSuffixKeyTests {
 
     @Test("Invalid: uppercase letters")
     func invalidUppercase() {
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixKey("U-CA")
         }
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixKey("Foo")
         }
     }
 
     @Test("Invalid: starts with digit")
     func invalidStartsWithDigit() {
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixKey("1foo")
         }
     }
 
     @Test("Invalid: starts with hyphen")
     func invalidStartsWithHyphen() {
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixKey("-foo")
         }
     }
 
     @Test("Invalid: contains invalid characters")
     func invalidCharacters() {
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixKey("foo@bar")
         }
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixKey("foo.bar")
         }
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixKey("foo bar")
         }
     }
 
     @Test("Invalid: empty key")
     func invalidEmpty() {
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixKey("")
         }
     }
@@ -91,27 +91,27 @@ struct ValidationSuffixValueTests {
 
     @Test("Invalid: contains hyphens")
     func invalidHyphens() {
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixValue("foo-bar")
         }
     }
 
     @Test("Invalid: contains special characters")
     func invalidSpecialCharacters() {
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixValue("foo@bar")
         }
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixValue("foo.bar")
         }
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixValue("foo_bar")
         }
     }
 
     @Test("Invalid: empty value")
     func invalidEmpty() {
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateSuffixValue("")
         }
     }
@@ -136,33 +136,33 @@ struct ValidationTimeZoneNameTests {
 
     @Test("Invalid: dot-only parts")
     func invalidDotParts() {
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateTimeZoneName(".")
         }
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateTimeZoneName("..")
         }
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateTimeZoneName("America/.")
         }
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateTimeZoneName("../Europe")
         }
     }
 
     @Test("Invalid: special characters")
     func invalidSpecialCharacters() {
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateTimeZoneName("America/Los@Angeles")
         }
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateTimeZoneName("Europe\\Paris")
         }
     }
 
     @Test("Invalid: empty name")
     func invalidEmpty() {
-        #expect(throws: RFC_9557.ParserError.self) {
+        #expect(throws: RFC_9557.Validation.ValidationError.self) {
             try RFC_9557.Validation.validateTimeZoneName("")
         }
     }

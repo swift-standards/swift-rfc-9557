@@ -1,7 +1,5 @@
 // RFC_9557.TimeZone.swift
 // swift-rfc-9557
-//
-// RFC 9557 Time Zone Annotation
 
 extension RFC_9557 {
     /// Time zone annotation for RFC 9557 timestamps
@@ -20,36 +18,23 @@ extension RFC_9557 {
     /// - `critical: true` - Receiver must process or reject
     /// - `critical: false` - Receiver may ignore if unsupported
     ///
-    /// ## Usage
+    /// ## Example
     ///
     /// ```swift
     /// // IANA time zone (elective)
     /// let tz1 = RFC_9557.TimeZone.iana("Europe/Paris", critical: false)
     ///
-    /// // IANA time zone (critical - must process)
+    /// // IANA time zone (critical)
     /// let tz2 = RFC_9557.TimeZone.iana("America/New_York", critical: true)
     ///
     /// // Offset time zone
     /// let tz3 = RFC_9557.TimeZone.offset("+08:45", critical: false)
     /// ```
-    ///
-    /// ## See Also
-    ///
-    /// - ``Suffix``
-    /// - ``ExtendedDateTime``
-    public enum TimeZone: Sendable, Equatable, Hashable {
+    public enum TimeZone: Sendable, Codable, Hashable {
         /// IANA Time Zone Database identifier
-        ///
-        /// - Parameters:
-        ///   - identifier: Time zone name (e.g., "America/Los_Angeles")
-        ///   - critical: Whether receiver must process this annotation
         case iana(String, critical: Bool)
 
         /// Numeric UTC offset as string
-        ///
-        /// - Parameters:
-        ///   - offset: Offset string (e.g., "+08:45", "-05:00")
-        ///   - critical: Whether receiver must process this annotation
         case offset(String, critical: Bool)
     }
 }
@@ -71,5 +56,14 @@ extension RFC_9557.TimeZone {
         case .iana(let id, _), .offset(let id, _):
             return id
         }
+    }
+}
+
+// MARK: - CustomStringConvertible
+
+extension RFC_9557.TimeZone: CustomStringConvertible {
+    public var description: String {
+        let prefix = isCritical ? "!" : ""
+        return "\(prefix)\(identifier)"
     }
 }
