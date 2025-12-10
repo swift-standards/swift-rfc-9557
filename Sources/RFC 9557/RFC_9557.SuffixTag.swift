@@ -125,9 +125,9 @@ extension RFC_9557.Suffix.Tag.Error: CustomStringConvertible {
 
 extension RFC_9557.Suffix.Tag: Hashable {}
 
-// MARK: - UInt8.ASCII.Serializable
+// MARK: - Binary.ASCII.Serializable
 
-extension RFC_9557.Suffix.Tag: UInt8.ASCII.Serializable {
+extension RFC_9557.Suffix.Tag: Binary.ASCII.Serializable {
     public static func serialize<Buffer: RangeReplaceableCollection>(
         ascii tag: Self,
         into buffer: inout Buffer
@@ -215,7 +215,7 @@ extension RFC_9557.Suffix.Tag: UInt8.ASCII.Serializable {
     }
 }
 
-extension RFC_9557.Suffix.Tag: UInt8.ASCII.RawRepresentable {
+extension RFC_9557.Suffix.Tag: Binary.ASCII.RawRepresentable {
     public typealias RawValue = String
 }
 

@@ -64,9 +64,9 @@ extension RFC_9557 {
 
 extension RFC_9557.Timestamp: Hashable {}
 
-// MARK: - UInt8.ASCII.Serializable
+// MARK: - Binary.ASCII.Serializable
 
-extension RFC_9557.Timestamp: UInt8.ASCII.Serializable {
+extension RFC_9557.Timestamp: Binary.ASCII.Serializable {
     public static func serialize<Buffer: RangeReplaceableCollection>(
         ascii timestamp: Self,
         into buffer: inout Buffer
@@ -127,7 +127,9 @@ extension RFC_9557.Timestamp: UInt8.ASCII.Serializable {
             } catch let error as RFC_9557.Suffix.Error {
                 throw Error.invalidSuffix(error)
             } catch {
-                throw Error.invalidSuffix(.malformedBrackets(String(decoding: suffixPart, as: UTF8.self)))
+                throw Error.invalidSuffix(
+                    .malformedBrackets(String(decoding: suffixPart, as: UTF8.self))
+                )
             }
 
             self.init(__unchecked: (), base: base, suffix: suffix)
@@ -145,7 +147,7 @@ extension RFC_9557.Timestamp: UInt8.ASCII.Serializable {
     }
 }
 
-extension RFC_9557.Timestamp: UInt8.ASCII.RawRepresentable {
+extension RFC_9557.Timestamp: Binary.ASCII.RawRepresentable {
     public typealias RawValue = String
 }
 

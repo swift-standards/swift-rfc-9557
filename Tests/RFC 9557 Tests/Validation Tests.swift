@@ -4,6 +4,7 @@
 // Tests for RFC_9557.Validation
 
 import Testing
+
 @testable import RFC_9557
 
 @Suite("RFC_9557.Validation - Suffix Key Format")

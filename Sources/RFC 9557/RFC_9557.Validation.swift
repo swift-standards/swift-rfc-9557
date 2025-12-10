@@ -48,10 +48,9 @@ extension RFC_9557.Validation {
 
         // Remaining: lowercase letters, digits, hyphens, underscores
         for byte in bytes {
-            let valid = byte.ascii.isLowercase ||
-                       byte.ascii.isDigit ||
-                       byte == UInt8.ascii.hyphen ||
-                       byte == UInt8.ascii.underline
+            let valid =
+                byte.ascii.isLowercase || byte.ascii.isDigit || byte == UInt8.ascii.hyphen
+                || byte == UInt8.ascii.underline
             guard valid else {
                 throw ValidationError.invalidSuffixKey
             }
@@ -151,12 +150,10 @@ extension RFC_9557.Validation {
                 }
 
                 // Validate character
-                let valid = byte.ascii.isLetter ||
-                           byte.ascii.isDigit ||
-                           byte == UInt8.ascii.period ||
-                           byte == UInt8.ascii.underline ||
-                           byte == UInt8.ascii.hyphen ||
-                           byte == UInt8.ascii.plus
+                let valid =
+                    byte.ascii.isLetter || byte.ascii.isDigit || byte == UInt8.ascii.period
+                    || byte == UInt8.ascii.underline || byte == UInt8.ascii.hyphen
+                    || byte == UInt8.ascii.plus
                 guard valid else {
                     throw ValidationError.invalidTimeZoneName
                 }

@@ -40,7 +40,8 @@ extension RFC_9557 {
         public let tags: [Suffix.Tag]
 
         /// Creates a suffix WITHOUT validation
-        private init(__unchecked: Void, timeZone: TimeZone?, calendar: String?, tags: [Suffix.Tag]) {
+        private init(__unchecked: Void, timeZone: TimeZone?, calendar: String?, tags: [Suffix.Tag])
+        {
             self.timeZone = timeZone
             self.calendar = calendar
             self.tags = tags
@@ -62,9 +63,9 @@ extension RFC_9557 {
 
 extension RFC_9557.Suffix: Hashable {}
 
-// MARK: - UInt8.ASCII.Serializable
+// MARK: - Binary.ASCII.Serializable
 
-extension RFC_9557.Suffix: UInt8.ASCII.Serializable {
+extension RFC_9557.Suffix: Binary.ASCII.Serializable {
     public static func serialize<Buffer: RangeReplaceableCollection>(
         ascii suffix: Self,
         into buffer: inout Buffer
@@ -228,7 +229,14 @@ extension RFC_9557.Suffix: UInt8.ASCII.Serializable {
 
                     // Only add first occurrence
                     if !seenKeys.contains(key) {
-                        tags.append(RFC_9557.Suffix.Tag(__unchecked: (), key: key, values: values, critical: critical))
+                        tags.append(
+                            RFC_9557.Suffix.Tag(
+                                __unchecked: (),
+                                key: key,
+                                values: values,
+                                critical: critical
+                            )
+                        )
                         seenKeys.insert(key)
                     }
                 }
@@ -261,7 +269,7 @@ extension RFC_9557.Suffix: UInt8.ASCII.Serializable {
     }
 }
 
-extension RFC_9557.Suffix: UInt8.ASCII.RawRepresentable {
+extension RFC_9557.Suffix: Binary.ASCII.RawRepresentable {
     public typealias RawValue = String
 }
 

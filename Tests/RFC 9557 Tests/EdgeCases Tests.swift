@@ -4,6 +4,7 @@
 // Tests for RFC 9557 edge cases
 
 import Testing
+
 @testable import RFC_9557
 
 @Suite("RFC_9557.Timestamp - Edge Cases: Time Zones")
@@ -24,7 +25,7 @@ struct EdgeCasesTimeZoneTests {
         let inputs = [
             ("2022-07-08T00:14:07+08:45[+08:45]", "+08:45"),
             ("2022-07-08T00:14:07-05:00[-05:00]", "-05:00"),
-            ("2022-07-08T00:14:07+00:00[+00:00]", "+00:00")
+            ("2022-07-08T00:14:07+00:00[+00:00]", "+00:00"),
         ]
 
         for (input, expectedOffset) in inputs {
@@ -50,7 +51,7 @@ struct EdgeCasesTimeZoneTests {
             "America/Indiana/Indianapolis",
             "America/North_Dakota/New_Salem",
             "Etc/GMT+5",
-            "Etc/GMT-8"
+            "Etc/GMT-8",
         ]
 
         for name in names {
@@ -65,7 +66,9 @@ struct EdgeCasesTimeZoneTests {
 struct EdgeCasesCalendarTests {
     @Test("Common calendar systems")
     func commonCalendarSystems() throws {
-        let calendars = ["hebrew", "islamic", "buddhist", "chinese", "japanese", "gregory", "iso8601"]
+        let calendars = [
+            "hebrew", "islamic", "buddhist", "chinese", "japanese", "gregory", "iso8601",
+        ]
 
         for calendar in calendars {
             let input = "2022-07-08T00:14:07Z[u-ca=\(calendar)]"
@@ -128,7 +131,8 @@ struct EdgeCasesComplexSuffixTests {
 
     @Test("Maximum complexity suffix")
     func maxComplexitySuffix() throws {
-        let input = "1996-12-19T16:39:57-08:00[!America/Los_Angeles][!u-ca=hebrew][foo=bar-baz][qux=test]"
+        let input =
+            "1996-12-19T16:39:57-08:00[!America/Los_Angeles][!u-ca=hebrew][foo=bar-baz][qux=test]"
         let ts = try RFC_9557.Timestamp(input)
 
         #expect(ts.suffix?.timeZone?.isCritical == true)
@@ -146,7 +150,7 @@ struct EdgeCasesRFC3339CompatibilityTests {
             "1996-12-19T16:39:57-08:00",
             "2022-07-08T00:14:07Z",
             "2022-07-08T00:14:07+00:00",
-            "1985-04-12T23:20:50.52Z"
+            "1985-04-12T23:20:50.52Z",
         ]
 
         for input in inputs {
