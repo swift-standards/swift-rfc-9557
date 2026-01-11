@@ -14,16 +14,16 @@ let package = Package(
         .library(name: "RFC 9557", targets: ["RFC 9557"])
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-standards/swift-incits-4-1986", from: "0.6.3"),
-        .package(url: "https://github.com/swift-standards/swift-standards", from: "0.10.0"),
-        .package(url: "https://github.com/swift-standards/swift-rfc-3339", from: "0.5.3"),
+        .package(path: "../swift-incits-4-1986"),
+        .package(path: "../../swift-primitives/swift-standard-library-extensions"),
+        .package(path: "../swift-rfc-3339"),
     ],
     targets: [
         .target(
             name: "RFC 9557",
             dependencies: [
                 .product(name: "INCITS 4 1986", package: "swift-incits-4-1986"),
-                .product(name: "Standards", package: "swift-standards"),
+                .product(name: "Standard Library Extensions", package: "swift-standard-library-extensions"),
                 .product(name: "RFC 3339", package: "swift-rfc-3339"),
             ]
         ),
