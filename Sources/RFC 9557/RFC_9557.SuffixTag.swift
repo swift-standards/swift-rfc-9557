@@ -1,7 +1,7 @@
 // RFC_9557.Suffix.Tag.swift
 // swift-rfc-9557
 
-public import INCITS_4_1986
+public import ASCII
 
 extension RFC_9557.Suffix {
     /// RFC 9557 suffix tag (key-value pair)

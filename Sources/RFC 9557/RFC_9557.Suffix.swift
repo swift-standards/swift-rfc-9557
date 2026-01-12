@@ -1,7 +1,7 @@
 // RFC_9557.Suffix.swift
 // swift-rfc-9557
 
-public import INCITS_4_1986
+public import ASCII
 
 extension RFC_9557 {
     /// RFC 9557 suffix annotations

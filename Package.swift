@@ -14,7 +14,7 @@ let package = Package(
         .library(name: "RFC 9557", targets: ["RFC 9557"])
     ],
     dependencies: [
-        .package(path: "../swift-incits-4-1986"),
+        .package(path: "../../swift-foundations/swift-ascii"),
         .package(path: "../../swift-primitives/swift-standard-library-extensions"),
         .package(path: "../swift-rfc-3339"),
     ],
@@ -22,7 +22,7 @@ let package = Package(
         .target(
             name: "RFC 9557",
             dependencies: [
-                .product(name: "INCITS 4 1986", package: "swift-incits-4-1986"),
+                .product(name: "ASCII", package: "swift-ascii"),
                 .product(name: "Standard Library Extensions", package: "swift-standard-library-extensions"),
                 .product(name: "RFC 3339", package: "swift-rfc-3339"),
             ]
