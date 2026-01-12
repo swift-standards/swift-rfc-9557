@@ -14,9 +14,9 @@ let package = Package(
         .library(name: "RFC 9557", targets: ["RFC 9557"])
     ],
     dependencies: [
-        .package(path: "../../swift-foundations/swift-ascii"),
-        .package(path: "../../swift-primitives/swift-standard-library-extensions"),
-        .package(path: "../swift-rfc-3339"),
+        .package(url: "https://github.com/swift-foundations/swift-ascii.git", from: "0.0.1"),
+        .package(url: "https://github.com/swift-primitives/swift-standard-library-extensions.git", from: "0.0.1"),
+        .package(url: "https://github.com/swift-standards/swift-rfc-3339.git", from: "0.0.1"),
     ],
     targets: [
         .target(
