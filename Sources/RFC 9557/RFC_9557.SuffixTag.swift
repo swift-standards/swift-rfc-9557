@@ -208,8 +208,16 @@ extension RFC_9557.Suffix.Tag: Binary.ASCII.Serializable {
         }
 
         let key = String(decoding: keyBytes, as: UTF8.self)
-        let valueString = String(decoding: valueBytes, as: UTF8.self)
-        let values = valueString.split(separator: "-").map(String.init)
+        let vArr = Array(valueBytes)
+        var values: [String] = []
+        var vStart = 0
+        for vi in 0..<vArr.count {
+            if vArr[vi] == 0x2D {  // '-'
+                values.append(String(decoding: vArr[vStart..<vi], as: UTF8.self))
+                vStart = vi &+ 1
+            }
+        }
+        values.append(String(decoding: vArr[vStart..<vArr.count], as: UTF8.self))
 
         try self.init(key: key, values: values, critical: critical)
     }

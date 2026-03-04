@@ -202,9 +202,17 @@ extension RFC_9557.Suffix: Binary.ASCII.Serializable {
                     throw Error.experimentalTagInInterchange(key)
                 }
 
-                // Parse values (split on hyphen)
-                let valueString = String(decoding: valueBytes, as: UTF8.self)
-                let values = valueString.split(separator: "-").map(String.init)
+                // Parse values (split on hyphen at byte level)
+                let vBytes = Array(valueBytes)
+                var values: [String] = []
+                var vStart = 0
+                for vi in 0..<vBytes.count {
+                    if vBytes[vi] == 0x2D {  // '-'
+                        values.append(String(decoding: vBytes[vStart..<vi], as: UTF8.self))
+                        vStart = vi &+ 1
+                    }
+                }
+                values.append(String(decoding: vBytes[vStart..<vBytes.count], as: UTF8.self))
 
                 for value in values {
                     do {
