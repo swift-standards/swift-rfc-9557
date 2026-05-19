@@ -70,7 +70,7 @@ extension RFC_9557.Timestamp: Binary.ASCII.Serializable {
     public static func serialize<Buffer: RangeReplaceableCollection>(
         ascii timestamp: Self,
         into buffer: inout Buffer
-    ) where Buffer.Element == UInt8 {
+    ) where Buffer.Element == Byte {
         RFC_3339.DateTime.serialize(ascii: timestamp.base, into: &buffer)
         if let suffix = timestamp.suffix {
             RFC_9557.Suffix.serialize(ascii: suffix, into: &buffer)
@@ -82,20 +82,20 @@ extension RFC_9557.Timestamp: Binary.ASCII.Serializable {
     /// ## Category Theory
     ///
     /// Parsing transformation:
-    /// - **Domain**: [UInt8] (ASCII bytes)
+    /// - **Domain**: [Byte] (ASCII bytes)
     /// - **Codomain**: RFC_9557.Timestamp (structured data)
     ///
     /// ## Example
     ///
     /// ```swift
-    /// let bytes = Array("1996-12-19T16:39:57-08:00[America/Los_Angeles]".utf8)
+    /// let bytes = Array<Byte>("1996-12-19T16:39:57-08:00[America/Los_Angeles]".utf8)
     /// let ts = try RFC_9557.Timestamp(ascii: bytes)
     /// ```
     ///
     /// - Parameter bytes: ASCII byte representation
     /// - Throws: `Error` if format is invalid
     public init<Bytes: Collection>(ascii bytes: Bytes, in context: Void = ()) throws(Error)
-    where Bytes.Element == UInt8 {
+    where Bytes.Element == Byte {
         guard !bytes.isEmpty else {
             throw Error.empty
         }
@@ -103,7 +103,7 @@ extension RFC_9557.Timestamp: Binary.ASCII.Serializable {
         // Find where RFC 3339 part ends (first '[' or end)
         var bracketIndex: Bytes.Index? = nil
         for index in bytes.indices {
-            if bytes[index] == .ascii.leftSquareBracket {
+            if bytes[index] == ASCII.Code.leftSquareBracket {
                 bracketIndex = index
                 break
             }

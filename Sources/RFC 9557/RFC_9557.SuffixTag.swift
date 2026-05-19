@@ -131,22 +131,22 @@ extension RFC_9557.Suffix.Tag: Binary.ASCII.Serializable {
     public static func serialize<Buffer: RangeReplaceableCollection>(
         ascii tag: Self,
         into buffer: inout Buffer
-    ) where Buffer.Element == UInt8 {
-        buffer.append(UInt8.ascii.leftSquareBracket)
+    ) where Buffer.Element == Byte {
+        buffer.append(ASCII.Code.leftSquareBracket)
         if tag.critical {
-            buffer.append(UInt8.ascii.exclamationPoint)
+            buffer.append(ASCII.Code.exclamationPoint)
         }
         buffer.append(contentsOf: tag.key.utf8)
-        buffer.append(UInt8.ascii.equalsSign)
+        buffer.append(ASCII.Code.equalsSign)
         var first = true
         for value in tag.values {
             if !first {
-                buffer.append(UInt8.ascii.hyphen)
+                buffer.append(ASCII.Code.hyphen)
             }
             buffer.append(contentsOf: value.utf8)
             first = false
         }
-        buffer.append(UInt8.ascii.rightSquareBracket)
+        buffer.append(ASCII.Code.rightSquareBracket)
     }
 
     /// Parses a suffix tag from ASCII bytes
@@ -154,21 +154,23 @@ extension RFC_9557.Suffix.Tag: Binary.ASCII.Serializable {
     /// - Parameter bytes: ASCII bytes (should be "[key=value]" format)
     /// - Throws: `Error` if format is invalid
     public init<Bytes: Collection>(ascii bytes: Bytes, in context: Void = ()) throws(Error)
-    where Bytes.Element == UInt8 {
+    where Bytes.Element == Byte {
         guard !bytes.isEmpty else {
             throw Error.emptyKey
         }
 
-        let arr = Array(bytes)
+        // Type-up: lift to ASCII.Code at the entry boundary so the body works
+        // against ASCII.Code constants directly (RFC 9557 grammar is strict ASCII).
+        let arr = Array<ASCII.Code>(bytes)
 
         // Find key=value part (skip brackets if present)
         var startIdx = 0
         var endIdx = arr.count
 
-        if arr.first == UInt8.ascii.leftSquareBracket {
+        if arr.first == ASCII.Code.leftSquareBracket {
             startIdx = 1
         }
-        if arr.last == UInt8.ascii.rightSquareBracket {
+        if arr.last == ASCII.Code.rightSquareBracket {
             endIdx = arr.count - 1
         }
 
@@ -183,14 +185,14 @@ extension RFC_9557.Suffix.Tag: Binary.ASCII.Serializable {
 
         // Check critical flag
         let firstByte = content.first!
-        let critical = firstByte == UInt8.ascii.exclamationPoint
+        let critical = firstByte == ASCII.Code.exclamationPoint
         let actualStart = critical ? startIdx + 1 : startIdx
         let actualContent = arr[actualStart..<endIdx]
 
         // Find equals sign
         var equalsIdx: Int? = nil
         for i in actualContent.indices {
-            if actualContent[i] == UInt8.ascii.equalsSign {
+            if actualContent[i] == ASCII.Code.equalsSign {
                 equalsIdx = i
                 break
             }
@@ -212,7 +214,7 @@ extension RFC_9557.Suffix.Tag: Binary.ASCII.Serializable {
         var values: [String] = []
         var vStart = 0
         for vi in 0..<vArr.count {
-            if vArr[vi] == 0x2D {  // '-'
+            if vArr[vi] == ASCII.Code.hyphen {
                 values.append(String(decoding: vArr[vStart..<vi], as: UTF8.self))
                 vStart = vi &+ 1
             }

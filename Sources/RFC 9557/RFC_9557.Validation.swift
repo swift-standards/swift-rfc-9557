@@ -30,27 +30,29 @@ extension RFC_9557.Validation {
     /// - Parameter key: Suffix key to validate
     /// - Throws: Error if format is invalid
     public static func validateSuffixKey(_ key: String) throws(ValidationError) {
-        try validateSuffixKey(Array(key.utf8))
+        try validateSuffixKey(Array<Byte>(key.utf8))
     }
 
     /// Validate suffix key from bytes (authoritative)
     @inlinable
     public static func validateSuffixKey<Bytes: Collection>(_ bytes: Bytes) throws(ValidationError)
-    where Bytes.Element == UInt8 {
+    where Bytes.Element == Byte {
         guard let first = bytes.first else {
             throw ValidationError.invalidSuffixKey
         }
 
         // First character: lowercase letter or underscore
-        guard first.ascii.isLowercase || first == UInt8.ascii.underline else {
+        let firstCode = ASCII.Code(first)
+        guard firstCode.isLowercase || firstCode == ASCII.Code.underline else {
             throw ValidationError.invalidSuffixKey
         }
 
         // Remaining: lowercase letters, digits, hyphens, underscores
         for byte in bytes {
+            let code = ASCII.Code(byte)
             let valid =
-                byte.ascii.isLowercase || byte.ascii.isDigit || byte == UInt8.ascii.hyphen
-                || byte == UInt8.ascii.underline
+                code.isLowercase || code.isDigit || code == ASCII.Code.hyphen
+                || code == ASCII.Code.underline
             guard valid else {
                 throw ValidationError.invalidSuffixKey
             }
@@ -66,8 +68,8 @@ extension RFC_9557.Validation {
     /// Check if key is experimental (byte version)
     @_transparent
     public static func isExperimentalKey<Bytes: Collection>(_ bytes: Bytes) -> Bool
-    where Bytes.Element == UInt8 {
-        bytes.first == UInt8.ascii.underline
+    where Bytes.Element == Byte {
+        bytes.first == ASCII.Code.underline
     }
 }
 
@@ -85,19 +87,20 @@ extension RFC_9557.Validation {
     /// - Parameter value: Suffix value to validate
     /// - Throws: Error if format is invalid
     public static func validateSuffixValue(_ value: String) throws(ValidationError) {
-        try validateSuffixValue(Array(value.utf8))
+        try validateSuffixValue(Array<Byte>(value.utf8))
     }
 
     /// Validate suffix value from bytes (authoritative)
     @inlinable
     public static func validateSuffixValue<Bytes: Collection>(_ bytes: Bytes) throws(ValidationError)
-    where Bytes.Element == UInt8 {
+    where Bytes.Element == Byte {
         guard !bytes.isEmpty else {
             throw ValidationError.invalidSuffixValue
         }
 
         for byte in bytes {
-            guard byte.ascii.isLetter || byte.ascii.isDigit else {
+            let code = ASCII.Code(byte)
+            guard code.isLetter || code.isDigit else {
                 throw ValidationError.invalidSuffixValue
             }
         }
@@ -116,13 +119,13 @@ extension RFC_9557.Validation {
     /// - Parameter name: Time zone name to validate
     /// - Throws: Error if format is invalid
     public static func validateTimeZoneName(_ name: String) throws(ValidationError) {
-        try validateTimeZoneName(Array(name.utf8))
+        try validateTimeZoneName(Array<Byte>(name.utf8))
     }
 
     /// Validate time zone name from bytes (authoritative)
     @inlinable
     public static func validateTimeZoneName<Bytes: Collection>(_ bytes: Bytes) throws(ValidationError)
-    where Bytes.Element == UInt8 {
+    where Bytes.Element == Byte {
         guard !bytes.isEmpty else {
             throw ValidationError.invalidTimeZoneName
         }
@@ -134,8 +137,9 @@ extension RFC_9557.Validation {
 
         for index in bytes.indices {
             let byte = bytes[index]
+            let code = ASCII.Code(byte)
 
-            if byte == UInt8.ascii.solidus {
+            if code == ASCII.Code.solidus {
                 // End of part - check if it's "." or ".."
                 if allDots && partLength > 0 && partLength <= 2 {
                     throw ValidationError.invalidTimeZoneName
@@ -145,15 +149,15 @@ extension RFC_9557.Validation {
                 allDots = true
             } else {
                 partLength += 1
-                if byte != UInt8.ascii.period {
+                if code != ASCII.Code.period {
                     allDots = false
                 }
 
                 // Validate character
                 let valid =
-                    byte.ascii.isLetter || byte.ascii.isDigit || byte == UInt8.ascii.period
-                    || byte == UInt8.ascii.underline || byte == UInt8.ascii.hyphen
-                    || byte == UInt8.ascii.plus
+                    code.isLetter || code.isDigit || code == ASCII.Code.period
+                    || code == ASCII.Code.underline || code == ASCII.Code.hyphen
+                    || code == ASCII.Code.plus
                 guard valid else {
                     throw ValidationError.invalidTimeZoneName
                 }

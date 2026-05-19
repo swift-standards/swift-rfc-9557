@@ -68,22 +68,22 @@ extension RFC_9557.Suffix: Binary.ASCII.Serializable {
     public static func serialize<Buffer: RangeReplaceableCollection>(
         ascii suffix: Self,
         into buffer: inout Buffer
-    ) where Buffer.Element == UInt8 {
+    ) where Buffer.Element == Byte {
         // Time zone first
         if let tz = suffix.timeZone {
-            buffer.append(UInt8.ascii.leftSquareBracket)
+            buffer.append(ASCII.Code.leftSquareBracket)
             if tz.isCritical {
-                buffer.append(UInt8.ascii.exclamationPoint)
+                buffer.append(ASCII.Code.exclamationPoint)
             }
             buffer.append(contentsOf: tz.identifier.utf8)
-            buffer.append(UInt8.ascii.rightSquareBracket)
+            buffer.append(ASCII.Code.rightSquareBracket)
         }
 
         // Calendar
         if let cal = suffix.calendar {
             buffer.append(contentsOf: "[u-ca=".utf8)
             buffer.append(contentsOf: cal.utf8)
-            buffer.append(UInt8.ascii.rightSquareBracket)
+            buffer.append(ASCII.Code.rightSquareBracket)
         }
 
         // Additional tags
@@ -97,13 +97,13 @@ extension RFC_9557.Suffix: Binary.ASCII.Serializable {
     /// ## Category Theory
     ///
     /// Parsing transformation:
-    /// - **Domain**: [UInt8] (ASCII bytes starting with '[')
+    /// - **Domain**: [Byte] (ASCII bytes starting with '[')
     /// - **Codomain**: RFC_9557.Suffix (structured data)
     ///
     /// - Parameter bytes: ASCII byte representation (must start with '[')
     /// - Throws: `Error` if format is invalid
     public init<Bytes: Collection>(ascii bytes: Bytes, in context: Void = ()) throws(Error)
-    where Bytes.Element == UInt8 {
+    where Bytes.Element == Byte {
         guard !bytes.isEmpty else {
             throw Error.empty
         }
@@ -117,7 +117,7 @@ extension RFC_9557.Suffix: Binary.ASCII.Serializable {
         var index = bytes.startIndex
         while index < bytes.endIndex {
             // Find opening bracket
-            guard bytes[index] == UInt8.ascii.leftSquareBracket else {
+            guard bytes[index] == ASCII.Code.leftSquareBracket else {
                 index = bytes.index(after: index)
                 continue
             }
@@ -128,7 +128,7 @@ extension RFC_9557.Suffix: Binary.ASCII.Serializable {
             var bracketEnd: Bytes.Index? = nil
             var searchIndex = contentStart
             while searchIndex < bytes.endIndex {
-                if bytes[searchIndex] == UInt8.ascii.rightSquareBracket {
+                if bytes[searchIndex] == ASCII.Code.rightSquareBracket {
                     bracketEnd = searchIndex
                     break
                 }
@@ -146,7 +146,7 @@ extension RFC_9557.Suffix: Binary.ASCII.Serializable {
 
             // Check for critical flag
             let firstByte = content.first!
-            let critical = firstByte == UInt8.ascii.exclamationPoint
+            let critical = firstByte == ASCII.Code.exclamationPoint
             let actualContent: Bytes.SubSequence
             if critical {
                 let afterBang = content.index(after: content.startIndex)
@@ -166,7 +166,7 @@ extension RFC_9557.Suffix: Binary.ASCII.Serializable {
             var hasEquals = false
             var equalsIndex: Bytes.Index? = nil
             for i in actualContent.indices {
-                if actualContent[i] == UInt8.ascii.equalsSign {
+                if actualContent[i] == ASCII.Code.equalsSign {
                     hasEquals = true
                     equalsIndex = i
                     break
@@ -207,7 +207,7 @@ extension RFC_9557.Suffix: Binary.ASCII.Serializable {
                 var values: [String] = []
                 var vStart = 0
                 for vi in 0..<vBytes.count {
-                    if vBytes[vi] == 0x2D {  // '-'
+                    if vBytes[vi] == ASCII.Code.hyphen {
                         values.append(String(decoding: vBytes[vStart..<vi], as: UTF8.self))
                         vStart = vi &+ 1
                     }
@@ -257,7 +257,7 @@ extension RFC_9557.Suffix: Binary.ASCII.Serializable {
 
                 // Check if offset or IANA
                 let firstChar = actualContent[actualContent.startIndex]
-                if firstChar == UInt8.ascii.plus || firstChar == UInt8.ascii.hyphen {
+                if firstChar == ASCII.Code.plus || firstChar == ASCII.Code.hyphen {
                     timeZone = .offset(tzString, critical: critical)
                 } else {
                     do {
