@@ -103,7 +103,7 @@ extension RFC_9557.Timestamp: Binary.ASCII.Serializable {
         // Find where RFC 3339 part ends (first '[' or end)
         var bracketIndex: Bytes.Index? = nil
         for index in bytes.indices {
-            if bytes[index] == ASCII.Code.leftSquareBracket {
+            if ASCII.Code(bytes[index]) == ASCII.Code.leftSquareBracket {
                 bracketIndex = index
                 break
             }

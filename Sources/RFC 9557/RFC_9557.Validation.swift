@@ -69,7 +69,7 @@ extension RFC_9557.Validation {
     @_transparent
     public static func isExperimentalKey<Bytes: Collection>(_ bytes: Bytes) -> Bool
     where Bytes.Element == Byte {
-        bytes.first == ASCII.Code.underline
+        bytes.first.map { ASCII.Code($0) == ASCII.Code.underline } ?? false
     }
 }
 
