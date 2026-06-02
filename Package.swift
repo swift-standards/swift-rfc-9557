@@ -14,10 +14,10 @@ let package = Package(
         .library(name: "RFC 9557", targets: ["RFC 9557"])
     ],
     dependencies: [
-        .package(path: "../../swift-primitives/swift-ascii-serializer-primitives"),
-        .package(path: "../../swift-primitives/swift-standard-library-extensions"),
-        .package(path: "../swift-rfc-3339"),
-        .package(path: "../../swift-primitives/swift-parser-primitives")
+        .package(url: "https://github.com/swift-primitives/swift-ascii-serializer-primitives.git", branch: "main"),
+        .package(url: "https://github.com/swift-primitives/swift-standard-library-extensions.git", branch: "main"),
+        .package(url: "https://github.com/swift-ietf/swift-rfc-3339.git", branch: "main"),
+        .package(url: "https://github.com/swift-primitives/swift-parser-primitives.git", branch: "main")
     ],
     targets: [
         .target(
